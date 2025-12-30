@@ -10,13 +10,15 @@ namespace Server.Models
     {
         public int Id { get; set; }
         public string PhoneNumber { get; set; }
-        public string Type { get; set; }
+        public int PartnerTypeId { get; set; }
         public string Address { get; set; }
         public string DirectorFullName { get; set; }
         public string Email { get; set; }
         public int Rating { get; set; }
         public string ComapnyName { get; set; }
 
+
+        public PartnerType PartnerType { get; set; }
         public List<Products> ProductEntities { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace Server
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Products> Products { get; set; }
         public DbSet<Material> Materials { get; set; }
+        public DbSet<PartnerType> PartnerTypes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,6 +29,7 @@ namespace Server
             modelBuilder.Entity<ProductType>().ToTable("ProductType");
             modelBuilder.Entity<Products>().ToTable("Products");
             modelBuilder.Entity<Material>().ToTable("Material");
+            modelBuilder.Entity<PartnerType>().ToTable("PartnerType");
 
 
             modelBuilder.Entity<Products>()
@@ -44,6 +46,12 @@ namespace Server
                 .HasOne(p => p.Material)
                 .WithMany(b => b.ProductEntities)
                 .HasForeignKey(p => p.MaterialId);
+
+            modelBuilder.Entity<Parthners>()
+            .HasOne(p => p.PartnerType)
+            .WithMany(t => t.Partners)
+            .HasForeignKey(p => p.PartnerTypeId);
+
         }
 
 

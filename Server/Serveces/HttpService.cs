@@ -45,7 +45,7 @@ namespace Server.Serveces
                     {
                         p.Id,
                         p.PhoneNumber,
-                        p.Type,
+                        p.PartnerTypeId,
                         p.DirectorFullName,
                         p.Rating,
                         p.ComapnyName
