@@ -40,6 +40,8 @@
             <TextBox x:Name="EmailInput" Margin="0 5"/>
         </StackPanel>
 
-        <Button Grid.Row="2" x:Name="AddButton" Content="Добавить" Width="150" Height="40" HorizontalAlignment="Center" Margin="10" Click="AddButtonClick"/>
+        <Button Grid.Row="2" x:Name="AddButton" Content="Добавить"
+                Width="150" Height="40" HorizontalAlignment="Center" Margin="10" 
+                Click="AddButtonClick"/>
     </Grid>
 </Window>

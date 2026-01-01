@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Server.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,6 +70,71 @@ namespace Server.Serveces
                 string responseBody = System.Text.Json.JsonSerializer.Serialize(parthners);
                 await WriteResponse(context, responseBody);
             }
+            else if (path == "/api/parthners" && method == "POST")
+            {
+                using var reader = new StreamReader(context.Request.InputStream);
+                string body = await reader.ReadToEndAsync();
+
+                var newPartner = System.Text.Json.JsonSerializer.Deserialize<Parthners>(body);
+
+                if (newPartner == null)
+                {
+                    await WriteResponse(context, "Invalid JSON", 400);
+                    return;
+                }
+
+                db.Parthners.Add(newPartner);
+                db.SaveChanges();
+
+                await WriteResponse(context, "{\"status\":\"created\"}", 201);
+                return;
+            }
+            else if (path.StartsWith("/api/parthners/") && method == "PUT")
+            {
+                int id = int.Parse(path.Split('/').Last());
+
+                var partner = db.Parthners.FirstOrDefault(p => p.Id == id);
+                if (partner == null)
+                {
+                    await WriteResponse(context, "Not Found", 404);
+                    return;
+                }
+
+                using var reader = new StreamReader(context.Request.InputStream);
+                string body = await reader.ReadToEndAsync();
+
+                var updated = System.Text.Json.JsonSerializer.Deserialize<Parthners>(body);
+
+                partner.ComapnyName = updated.ComapnyName;
+                partner.PhoneNumber = updated.PhoneNumber;
+                partner.Address = updated.Address;
+                partner.DirectorFullName = updated.DirectorFullName;
+                partner.Email = updated.Email;
+                partner.Rating = updated.Rating;
+                partner.PartnerTypeId = updated.PartnerTypeId;
+
+                db.SaveChanges();
+
+                await WriteResponse(context, "{\"status\":\"updated\"}", 200);
+                return;
+            }
+            else if (path.StartsWith("/api/parthners/") && method == "DELETE")
+            {
+                int id = int.Parse(path.Split('/').Last());
+
+                var partner = db.Parthners.FirstOrDefault(p => p.Id == id);
+                if (partner == null)
+                {
+                    await WriteResponse(context, "Not Found", 404);
+                    return;
+                }
+
+                db.Parthners.Remove(partner);
+                db.SaveChanges();
+
+                await WriteResponse(context, "{\"status\":\"deleted\"}", 200);
+                return;
+            }
 
             else if (path == "/api/products" && method == "GET")
             {
@@ -83,6 +149,73 @@ namespace Server.Serveces
                 string responseBody = System.Text.Json.JsonSerializer.Serialize(products);
                 await WriteResponse(context, responseBody);
             }
+            if (path == "/api/products" && method == "POST")
+            {
+                using var reader = new StreamReader(context.Request.InputStream);
+                string body = await reader.ReadToEndAsync();
+
+                var newProduct = System.Text.Json.JsonSerializer.Deserialize<Products>(body);
+
+                if (newProduct == null)
+                {
+                    await WriteResponse(context, "Invalid JSON", 400);
+                    return;
+                }
+
+                db.Products.Add(newProduct);
+                db.SaveChanges();
+
+                await WriteResponse(context, "{\"status\":\"created\"}", 201);
+                return;
+            }
+            if (path.StartsWith("/api/products/") && method == "PUT")
+            {
+                int id = int.Parse(path.Split('/').Last());
+
+                var product = db.Products.FirstOrDefault(p => p.Id == id);
+                if (product == null)
+                {
+                    await WriteResponse(context, "Not Found", 404);
+                    return;
+                }
+
+                using var reader = new StreamReader(context.Request.InputStream);
+                string body = await reader.ReadToEndAsync();
+
+                var updated = System.Text.Json.JsonSerializer.Deserialize<Products>(body);
+
+                product.Name = updated.Name;
+                product.TypeId = updated.TypeId;
+                product.MaterialId = updated.MaterialId;
+                product.TotalProducts = updated.TotalProducts;
+                product.Height = updated.Height;
+                product.Width = updated.Width;
+                product.ParthnerId = updated.ParthnerId;
+                product.SaleDate = updated.SaleDate;
+
+                db.SaveChanges();
+
+                await WriteResponse(context, "{\"status\":\"updated\"}", 200);
+                return;
+            }
+            if (path.StartsWith("/api/products/") && method == "DELETE")
+            {
+                int id = int.Parse(path.Split('/').Last());
+
+                var product = db.Products.FirstOrDefault(p => p.Id == id);
+                if (product == null)
+                {
+                    await WriteResponse(context, "Not Found", 404);
+                    return;
+                }
+
+                db.Products.Remove(product);
+                db.SaveChanges();
+
+                await WriteResponse(context, "{\"status\":\"deleted\"}", 200);
+                return;
+            }
+
             else
             {
                 await WriteResponse(context, "Not Found", 404);

@@ -18,7 +18,7 @@ namespace Client
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<Parthners> parthners;
+        private List<Parthners> parthners;  // ParthnersProductsResponse
         HttpCLientService httpService;
         private List<Products> productsTotal;
         public MainWindow()
@@ -53,7 +53,7 @@ namespace Client
 
         public async Task LoadData()
         {
-            parthners = await httpService.getParthners();
+            parthners = await httpService.GetParthners();
 
             Dispatcher.Invoke(() =>
             {
