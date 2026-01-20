@@ -31,14 +31,14 @@ namespace Server.Serveces
 
         public static async Task HandleRequest(HttpListenerContext context)
         {
-            string path = context.Request.Url.AbsolutePath;
+            string path = context.Request.Url.AbsolutePath.TrimEnd('/');
             string method = context.Request.HttpMethod;
 
             Console.WriteLine($"путь {path}, метод {method}");
 
             using var db = new DbAppContext();
 
-            if (path == "/api/parthners" && method == "GET")
+            if (path == "/api/parthners"  && method == "GET")
             {
                 var parthners = db.Parthners
                     .Include(p => p.ProductEntities)
@@ -47,7 +47,9 @@ namespace Server.Serveces
                         p.Id,
                         p.PhoneNumber,
                         p.PartnerTypeId,
+                        p.Address,
                         p.DirectorFullName,
+                        p.Email,
                         p.Rating,
                         p.ComapnyName
                     }).ToList();

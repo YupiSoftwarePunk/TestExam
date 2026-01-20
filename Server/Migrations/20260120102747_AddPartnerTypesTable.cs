@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Server.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class AddPartnerTypesTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,22 +29,16 @@ namespace Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Parthners",
+                name: "PartnerType",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: false),
-                    DirectorFullName = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    Rating = table.Column<int>(type: "integer", nullable: false),
-                    ComapnyName = table.Column<string>(type: "text", nullable: false)
+                    TypeName = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Parthners", x => x.Id);
+                    table.PrimaryKey("PK_PartnerType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,6 +53,31 @@ namespace Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Parthners",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    PartnerTypeId = table.Column<int>(type: "integer", nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: false),
+                    DirectorFullName = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Rating = table.Column<int>(type: "integer", nullable: false),
+                    ComapnyName = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Parthners", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Parthners_PartnerType_PartnerTypeId",
+                        column: x => x.PartnerTypeId,
+                        principalTable: "PartnerType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,6 +119,11 @@ namespace Server.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Parthners_PartnerTypeId",
+                table: "Parthners",
+                column: "PartnerTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_MaterialId",
                 table: "Products",
                 column: "MaterialId");
@@ -129,6 +153,9 @@ namespace Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductType");
+
+            migrationBuilder.DropTable(
+                name: "PartnerType");
         }
     }
 }

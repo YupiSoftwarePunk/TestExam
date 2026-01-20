@@ -134,11 +134,18 @@ namespace Server.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Article")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<double>("Height")
                         .HasColumnType("double precision");
 
                     b.Property<int>("MaterialId")
                         .HasColumnType("integer");
+
+                    b.Property<double>("MinPrice")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Name")
                         .IsRequired()

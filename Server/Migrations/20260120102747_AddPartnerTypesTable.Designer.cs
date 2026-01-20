@@ -12,8 +12,8 @@ using Server;
 namespace Server.Migrations
 {
     [DbContext(typeof(DbAppContext))]
-    [Migration("20251224104524_Initial")]
-    partial class Initial
+    [Migration("20260120102747_AddPartnerTypesTable")]
+    partial class AddPartnerTypesTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,6 +75,9 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("PartnerTypeId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("text");
@@ -82,13 +85,28 @@ namespace Server.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Type")
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartnerTypeId");
+
+                    b.ToTable("Parthners", (string)null);
+                });
+
+            modelBuilder.Entity("Server.Models.PartnerType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("TypeName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Parthners", (string)null);
+                    b.ToTable("PartnerType", (string)null);
                 });
 
             modelBuilder.Entity("Server.Models.ProductType", b =>
@@ -155,6 +173,17 @@ namespace Server.Migrations
                     b.ToTable("Products", (string)null);
                 });
 
+            modelBuilder.Entity("Server.Models.Parthners", b =>
+                {
+                    b.HasOne("Server.Models.PartnerType", "PartnerType")
+                        .WithMany("Partners")
+                        .HasForeignKey("PartnerTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PartnerType");
+                });
+
             modelBuilder.Entity("Server.Models.Products", b =>
                 {
                     b.HasOne("Server.Models.Material", "Material")
@@ -190,6 +219,11 @@ namespace Server.Migrations
             modelBuilder.Entity("Server.Models.Parthners", b =>
                 {
                     b.Navigation("ProductEntities");
+                });
+
+            modelBuilder.Entity("Server.Models.PartnerType", b =>
+                {
+                    b.Navigation("Partners");
                 });
 
             modelBuilder.Entity("Server.Models.ProductType", b =>

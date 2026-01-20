@@ -17,6 +17,7 @@ namespace Client.Models
         public int Rating { get; set; }
         public string ComapnyName { get; set; }
 
+        public PartnerType PartnerType { get; set; }
         public List<Products> ProductEntities { get; set; }
     }
 }

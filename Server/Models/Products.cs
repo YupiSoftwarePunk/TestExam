@@ -18,6 +18,8 @@ namespace Server.Models
         public double Width { get; set; }
         public int ParthnerId { get; set; }
         public DateTime SaleDate { get; set; }
+        public string Article { get; set; }
+        public double MinPrice { get; set; }
 
         public Material Material { get; set; }
         public Parthners Parthner { get; set; }

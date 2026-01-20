@@ -12,8 +12,8 @@ using Server;
 namespace Server.Migrations
 {
     [DbContext(typeof(DbAppContext))]
-    [Migration("20251230174520_AddPartnerType")]
-    partial class AddPartnerType
+    [Migration("20260120110748_AddArticleAndMinPriceToProducts")]
+    partial class AddArticleAndMinPriceToProducts
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -137,11 +137,18 @@ namespace Server.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Article")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<double>("Height")
                         .HasColumnType("double precision");
 
                     b.Property<int>("MaterialId")
                         .HasColumnType("integer");
+
+                    b.Property<double>("MinPrice")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Name")
                         .IsRequired()
